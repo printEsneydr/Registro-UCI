@@ -90,38 +90,21 @@ class ParametrosReordenarMonitorias {
   });
 }
 
-/// Provider para obtener monitorías hemodinámicas
-final monitoriasHemodinamicasProvider = FutureProvider.family<
+final monitoriasHemodinamicasStreamProvider = StreamProvider.family<
     List<MonitoriaHemodinamica>, ParametrosMonitoriaHemodinamica>(
-  (ref, params) async {
+  (ref, params) {
     final repo = ref.watch(monitoriasHemodinamicaRepositoryProvider);
-
-    try {
-      if (params.idMonitoria != null) {
-        final monitoria = await repo.obtenerMonitoriaPorId(
-          idIngreso: params.idIngreso,
-          idRegistroDiario: params.idRegistroDiario,
-          idMonitoria: params.idMonitoria!,
-        );
-        return monitoria != null ? [monitoria] : [];
-      } else {
-        return await repo.obtenerTodasLasMonitorias(
-          idIngreso: params.idIngreso,
-          idRegistroDiario: params.idRegistroDiario,
-        );
-      }
-    } catch (e, stackTrace) {
-      debugPrintStack(stackTrace: stackTrace);
-      throw Exception('Error al obtener monitorías hemodinámicas: $e');
-    }
+    return repo.obtenerTodasLasMonitoriasStream(
+      idIngreso: params.idIngreso,
+      idRegistroDiario: params.idRegistroDiario,
+    );
   },
 );
 
-/// Provider para guardar o actualizar monitorías hemodinámicas
 final guardarMonitoriaHemodinamicaProvider =
     FutureProvider.family<void, ParametrosGuardarMonitoria>(
   (ref, params) async {
-    final repo = ref.watch(monitoriasHemodinamicaRepositoryProvider);
+    final repo = ref.read(monitoriasHemodinamicaRepositoryProvider);
 
     try {
       if (params.idMonitoria != null) {
@@ -178,13 +161,12 @@ final guardarMonitoriaHemodinamicaProvider =
   },
 );
 
-/// Provider para eliminar monitorías hemodinámicas
 final eliminarMonitoriaHemodinamicaProvider =
     FutureProvider.family<void, ParametrosMonitoriaHemodinamica>(
   (ref, params) async {
     if (params.idMonitoria == null) return;
 
-    final repo = ref.watch(monitoriasHemodinamicaRepositoryProvider);
+    final repo = ref.read(monitoriasHemodinamicaRepositoryProvider);
 
     try {
       await repo.eliminarMonitoria(
@@ -199,11 +181,10 @@ final eliminarMonitoriaHemodinamicaProvider =
   },
 );
 
-/// Provider para reordenar monitorías hemodinámicas
 final reordenarMonitoriasHemodinamicasProvider =
     FutureProvider.family<void, ParametrosReordenarMonitorias>(
   (ref, params) async {
-    final repo = ref.watch(monitoriasHemodinamicaRepositoryProvider);
+    final repo = ref.read(monitoriasHemodinamicaRepositoryProvider);
 
     try {
       await repo.reordenarMonitorias(

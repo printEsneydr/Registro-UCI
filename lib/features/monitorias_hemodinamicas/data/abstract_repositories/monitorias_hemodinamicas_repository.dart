@@ -5,12 +5,13 @@ import 'package:registro_uci/features/monitorias_hemodinamicas/domain/models/mon
 /// Define las operaciones CRUD básicas y específicas para el manejo de
 /// parámetros hemodinámicos de pacientes.
 abstract class MonitoriaHemodinamicaRepository {
+  /// Obtiene un stream de todas las monitorías hemodinámicas de un registro diario
+  Stream<List<MonitoriaHemodinamica>> obtenerTodasLasMonitoriasStream({
+    required String idIngreso,
+    required String idRegistroDiario,
+  });
+
   /// Obtiene todas las monitorías hemodinámicas de un registro diario
-  ///
-  /// [idIngreso]: ID del ingreso hospitalario
-  /// [idRegistroDiario]: ID del registro diario
-  ///
-  /// Retorna una lista de [MonitoriaHemodinamica] ordenadas por hora/orden
   Future<List<MonitoriaHemodinamica>> obtenerTodasLasMonitorias({
     required String idIngreso,
     required String idRegistroDiario,

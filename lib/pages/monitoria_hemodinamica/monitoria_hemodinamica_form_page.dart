@@ -424,7 +424,7 @@ class FormularioMonitoriaScreenState
         ),
       ).future);
 
-      ref.invalidate(monitoriasHemodinamicasProvider(
+      ref.invalidate(monitoriasHemodinamicasStreamProvider(
         ParametrosMonitoriaHemodinamica(
           idIngreso: widget.idIngreso,
           idRegistroDiario: widget.idRegistroDiario,

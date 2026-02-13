@@ -22,6 +22,21 @@ class FirebaseMonitoriaHemodinamicaRepository
   }
 
   @override
+  Stream<List<MonitoriaHemodinamica>> obtenerTodasLasMonitoriasStream({
+    required String idIngreso,
+    required String idRegistroDiario,
+  }) {
+    return _obtenerColeccion(
+      idIngreso: idIngreso,
+      idRegistroDiario: idRegistroDiario,
+    ).orderBy('orden', descending: false).snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return MonitoriaHemodinamica.fromJson(doc.data(), id: doc.id);
+      }).toList();
+    });
+  }
+
+  @override
   Future<List<MonitoriaHemodinamica>> obtenerTodasLasMonitorias({
     required String idIngreso,
     required String idRegistroDiario,

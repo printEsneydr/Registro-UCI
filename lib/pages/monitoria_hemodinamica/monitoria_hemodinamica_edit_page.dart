@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:registro_uci/common/providers/repository_providers.dart';
 import 'package:registro_uci/features/monitorias_hemodinamicas/data/providers/monitoria_hemodinamica_provider.dart';
 
 class EditMonitoriaScreen extends ConsumerStatefulWidget {
@@ -79,20 +80,17 @@ class EditMonitoriaScreenState extends ConsumerState<EditMonitoriaScreen> {
 
   Future<void> _cargarDatosExistente() async {
     try {
-      final params = ParametrosMonitoriaHemodinamica(
+      final repo = ref.read(monitoriasHemodinamicaRepositoryProvider);
+
+      final monitoria = await repo.obtenerMonitoriaPorId(
         idIngreso: widget.idIngreso,
         idRegistroDiario: widget.idRegistroDiario,
         idMonitoria: widget.idMonitoriaExistente!,
       );
 
-      final monitorias =
-          await ref.read(monitoriasHemodinamicasProvider(params).future);
-
-      if (monitorias.isEmpty) {
+      if (monitoria == null) {
         throw Exception('Monitoría no encontrada');
       }
-
-      final monitoria = monitorias.first;
 
       if (mounted) {
         setState(() {
@@ -153,6 +151,13 @@ class EditMonitoriaScreenState extends ConsumerState<EditMonitoriaScreen> {
           saturacion: saturacion,
         ),
       ).future);
+
+      ref.invalidate(monitoriasHemodinamicasStreamProvider(
+        ParametrosMonitoriaHemodinamica(
+          idIngreso: widget.idIngreso,
+          idRegistroDiario: widget.idRegistroDiario,
+        ),
+      ));
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

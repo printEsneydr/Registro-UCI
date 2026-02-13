@@ -26,7 +26,7 @@ class GraphicsPage extends ConsumerWidget {
   }
 
   Widget _buildBody(WidgetRef ref) {
-    final monitoriasAsync = ref.watch(monitoriasHemodinamicasProvider(
+    final monitoriasAsync = ref.watch(monitoriasHemodinamicasStreamProvider(
       ParametrosMonitoriaHemodinamica(
         idIngreso: idIngreso,
         idRegistroDiario: idRegistroDiario,

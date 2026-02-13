@@ -22,7 +22,7 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
       idIngreso: idIngreso,
       idRegistroDiario: idRegistroDiario,
     );
-    final monitoriasData = ref.watch(monitoriasHemodinamicasProvider(params));
+    final monitoriasData = ref.watch(monitoriasHemodinamicasStreamProvider(params));
 
     return Card(
       margin: const EdgeInsets.all(16.0),
@@ -32,10 +32,7 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. Header
             _buildHeader(context),
-
-            // 2. Espacio + Botón (debajo del header)
             const SizedBox(height: 12.0),
             SizedBox(
               width: double.infinity,
@@ -70,8 +67,6 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
                 label: const Text('Ver Gráficos'),
               ),
             ),
-
-            // 3. Espacio + Contenido (debajo del botón)
             const SizedBox(height: 16.0),
             _buildContent(monitoriasData, context, ref),
           ],
@@ -103,10 +98,49 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
           ..._buildTimeList(data, context, ref),
         ],
       ),
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) => Text(
-        'Error al cargar los datos: ${error.toString()}',
-        style: const TextStyle(color: Colors.red),
+      loading: () => const Center(
+        child: Padding(
+          padding: EdgeInsets.all(32.0),
+          child: CircularProgressIndicator(),
+        ),
+      ),
+      error: (error, _) => _buildErrorWidget(context, ref, error),
+    );
+  }
+
+  Widget _buildErrorWidget(BuildContext context, WidgetRef ref, Object error) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            const Icon(Icons.error_outline, color: Colors.red, size: 48),
+            const SizedBox(height: 8),
+            Text(
+              'Error al cargar los datos',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              error.toString(),
+              style: const TextStyle(color: Colors.grey, fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () {
+                ref.invalidate(monitoriasHemodinamicasStreamProvider(
+                  ParametrosMonitoriaHemodinamica(
+                    idIngreso: idIngreso,
+                    idRegistroDiario: idRegistroDiario,
+                  ),
+                ));
+              },
+              icon: const Icon(Icons.refresh),
+              label: const Text('Reintentar'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -142,30 +176,7 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
     WidgetRef ref,
   ) {
     const hours = [
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20,
-      21,
-      22,
-      23,
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
+      8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7
     ];
 
     return hours.map((hour) {
@@ -179,17 +190,13 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
       );
       final hasRecord = record.idMonitoria.isNotEmpty;
 
-      return _buildTimeCard(
-        context,
-        hour: hour,
-        hasRecord: hasRecord,
-        record: record,
-      );
+      return _buildTimeCard(context, ref, hour: hour, hasRecord: hasRecord, record: record);
     }).toList();
   }
 
   Widget _buildTimeCard(
-    BuildContext context, {
+    BuildContext context,
+    WidgetRef ref, {
     required int hour,
     required bool hasRecord,
     required MonitoriaHemodinamica record,
@@ -207,9 +214,8 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
               _buildStatusIcon(hasRecord),
               const SizedBox(width: 12),
               _buildTimeLabel(hour, hasRecord),
-              const SizedBox(width: 12),
               const Spacer(),
-              _buildActionButtons(context, hour, hasRecord, record.idMonitoria),
+              _buildActionButtons(context, ref, hour, hasRecord, record.idMonitoria),
             ],
           ),
         ),
@@ -236,6 +242,7 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
 
   Widget _buildActionButtons(
     BuildContext context,
+    WidgetRef ref,
     int hour,
     bool hasRecord,
     String idMonitoria,
@@ -243,29 +250,64 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        IconButton(
-          icon: Icon(
-            Icons.add_circle_outline,
-            color: !hasRecord ? Colors.green : Colors.grey,
-          ),
+        _buildAccessibleButton(
+          icon: Icons.add_circle_outline,
+          color: !hasRecord ? Colors.green : Colors.grey,
+          label: 'Agregar',
           onPressed: !hasRecord ? () => _createForm(context, hour: hour) : null,
-          tooltip: 'Agregar registro',
         ),
-        IconButton(
-          icon: Icon(
-            Icons.edit_outlined,
-            color: hasRecord ? Colors.blue : Colors.grey,
-          ),
+        const SizedBox(width: 4),
+        _buildAccessibleButton(
+          icon: Icons.edit_outlined,
+          color: hasRecord ? Colors.blue : Colors.grey,
+          label: 'Editar',
           onPressed: hasRecord
-              ? () => _editForm(
-                    context,
-                    hour: hour,
-                    idMonitoria: idMonitoria,
-                  )
+              ? () => _editForm(context, hour: hour, idMonitoria: idMonitoria)
               : null,
-          tooltip: 'Editar registro',
+        ),
+        const SizedBox(width: 4),
+        _buildAccessibleButton(
+          icon: Icons.delete_outline,
+          color: hasRecord ? Colors.red : Colors.grey,
+          label: 'Eliminar',
+          onPressed: hasRecord
+              ? () => _confirmDelete(context, ref, idMonitoria, hour)
+              : null,
         ),
       ],
+    );
+  }
+
+  Widget _buildAccessibleButton({
+    required IconData icon,
+    required Color color,
+    required String label,
+    required VoidCallback? onPressed,
+  }) {
+    return Tooltip(
+      message: label,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, color: color, size: 20),
+              const SizedBox(width: 4),
+              Text(
+                label,
+                style: TextStyle(
+                  color: onPressed != null ? color : Colors.grey,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -296,7 +338,12 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
                 _buildDetailItem('PVC', '${record.pvc} mmHg'),
               if (record.saturacion != null)
                 _buildDetailItem('Sat O₂', '${record.saturacion}%'),
-              // Agregar más campos según sea necesario
+              if (record.fio2 != null)
+                _buildDetailItem('FiO₂', '${record.fio2}%'),
+              if (record.glucometria != null)
+                _buildDetailItem('Glucemia', '${record.glucometria} mg/dL'),
+              if (record.insulina != null)
+                _buildDetailItem('Insulina', '${record.insulina} U'),
             ],
           ),
         ),
@@ -325,11 +372,7 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
     );
   }
 
-  void _createForm(
-    BuildContext context, {
-    required int hour,
-    String? idMonitoria,
-  }) {
+  void _createForm(BuildContext context, {required int hour}) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -337,18 +380,13 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
           idIngreso: idIngreso,
           idRegistroDiario: idRegistroDiario,
           horaInicial: hour,
-          idMonitoriaExistente: idMonitoria,
         ),
         fullscreenDialog: true,
       ),
     );
   }
 
-  void _editForm(
-    BuildContext context, {
-    required int hour,
-    String? idMonitoria,
-  }) {
+  void _editForm(BuildContext context, {required int hour, required String idMonitoria}) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -361,5 +399,48 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
         fullscreenDialog: true,
       ),
     );
+  }
+
+  void _confirmDelete(BuildContext context, WidgetRef ref, String idMonitoria, int hour) {
+    showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmar eliminación'),
+        content: Text('¿Eliminar el registro de las ${_formatHour(hour)}?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Eliminar', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    ).then((confirm) async {
+      if (confirm == true) {
+        try {
+          await ref.read(eliminarMonitoriaHemodinamicaProvider(
+            ParametrosMonitoriaHemodinamica(
+              idIngreso: idIngreso,
+              idRegistroDiario: idRegistroDiario,
+              idMonitoria: idMonitoria,
+            ),
+          ).future);
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Registro eliminado correctamente')),
+            );
+          }
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error al eliminar: $e')),
+            );
+          }
+        }
+      }
+    });
   }
 }
