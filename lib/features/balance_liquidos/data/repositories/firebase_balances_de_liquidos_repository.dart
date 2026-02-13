@@ -27,4 +27,17 @@ class FirebaseBalancesDeLiquidosRepository
 
     return balancesDeLiquidos;
   }
+
+  @override
+  Future<DocumentSnapshot<Map<String, dynamic>>> getBalanceDeLiquidosDoc(
+    String idIngreso,
+    String idRegistroDiario,
+  ) async {
+    return await _firestore
+        .collection('ingresos')
+        .doc(idIngreso)
+        .collection('registrosDiarios')
+        .doc(idRegistroDiario)
+        .get();
+  }
 }

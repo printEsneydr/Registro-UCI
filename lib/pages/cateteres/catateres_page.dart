@@ -1,27 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../features/cateteres/data/repositories/cateteres_repository.dart';
 import 'package:registro_uci/features/cateteres/presentation/widgets/components/buttons/create_cateter_floating_button.dart';
+import 'package:registro_uci/features/cateteres/presentation/controllers/delete_cateter_controller.dart';
+import 'package:registro_uci/features/cateteres/data/providers/cateteres_providers.dart';
 import 'update_cateteres_page.dart';
 import '../../features/cateteres/domain/models/cateter.dart';
 
-class ListadoCateteresPage extends ConsumerStatefulWidget {
+class ListadoCateteresPage extends ConsumerWidget {
   final String idIngreso;
 
   const ListadoCateteresPage({super.key, required this.idIngreso});
 
   @override
-  _ListadoCateteresPageState createState() => _ListadoCateteresPageState();
-}
-
-class _ListadoCateteresPageState extends ConsumerState<ListadoCateteresPage> {
-  final dateFormat = DateFormat('dd/MM/yyyy HH:mm');
-
-  @override
-  Widget build(BuildContext context) {
-    final cateteresAsync =
-        ref.watch(cateteresByIngresoProvider(widget.idIngreso));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cateteresAsync = ref.watch(cateteresByIngresoProvider(idIngreso));
+    final dateFormat = DateFormat('dd/MM/yyyy HH:mm');
 
     return Scaffold(
       appBar: AppBar(
@@ -76,124 +70,129 @@ class _ListadoCateteresPageState extends ConsumerState<ListadoCateteresPage> {
 
               return Card(
                 elevation: 2,
-                margin: const EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                child: ExpansionTile(
+                  tilePadding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  leading: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: isActive
+                          ? Colors.green.shade100
+                          : Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.medical_services,
+                      color: isActive
+                          ? Colors.green.shade700
+                          : Colors.grey.shade600,
+                    ),
+                  ),
+                  title: Text(
+                    cateter.tipo ?? 'Tipo no especificado',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Row(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            cateter.tipo ?? 'Tipo no especificado',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue.shade800,
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: isActive
-                                  ? Colors.green.shade100
-                                  : Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              isActive ? 'ACTIVO' : 'RETIRADO',
-                              style: TextStyle(
-                                color: isActive
-                                    ? Colors.green.shade800
-                                    : Colors.grey.shade800,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      _buildDetailRow(
-                        icon: Icons.calendar_today,
-                        label: 'Inserción:',
-                        value: dateFormat.format(fechaInsercion),
-                      ),
-                      const SizedBox(height: 8),
-                      _buildDetailRow(
-                        icon: Icons.location_on,
-                        label: 'Sitio:',
-                        value: cateter.sitio ?? 'No especificado',
-                      ),
-                      const SizedBox(height: 8),
-                      _buildDetailRow(
-                        icon: Icons.place,
-                        label: 'Procedencia:',
-                        value: cateter.lugarProcedencia ?? 'No especificado',
-                      ),
-                      if (fechaRetiro != null) ...[
-                        const SizedBox(height: 8),
-                        _buildDetailRow(
-                          icon: Icons.calendar_today,
-                          label: 'Retiro:',
-                          value: dateFormat.format(fechaRetiro),
+                      Container(
+                        margin: const EdgeInsets.only(top: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: isActive
+                              ? Colors.green.shade100
+                              : Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(8),
                         ),
+                        child: Text(
+                          isActive ? 'ACTIVO' : 'RETIRADO',
+                          style: TextStyle(
+                            color: isActive
+                                ? Colors.green.shade800
+                                : Colors.grey.shade700,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        '$diasEnUso días',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color:
+                              diasEnUso > 7 ? Colors.red : Colors.grey.shade600,
+                        ),
+                      ),
+                      if (isPeriferico && diasEnUso >= 5) ...[
+                        const SizedBox(width: 4),
+                        const Icon(Icons.warning,
+                            color: Colors.orange, size: 18),
                       ],
-                      const SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                '$diasEnUso días',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color:
-                                      diasEnUso > 7 ? Colors.red : Colors.green,
-                                ),
-                              ),
-                              if (isPeriferico && diasEnUso >= 5) ...[
-                                const SizedBox(width: 8),
-                                const Icon(Icons.warning,
-                                    color: Colors.orange, size: 24),
-                              ],
-                            ],
+                    ],
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit,
+                            color: Colors.blue, size: 20),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditCateterPage(
+                              idIngreso: idIngreso,
+                              cateter: cateter,
+                            ),
                           ),
-                          Row(
-                            children: [
-                              _buildActionButton(
-                                icon: Icons.edit,
-                                color: Colors.blue,
-                                onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => EditCateterPage(
-                                      idIngreso: widget.idIngreso,
-                                      cateter: cateter,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              _buildActionButton(
-                                icon: Icons.delete,
-                                color: Colors.red,
-                                onPressed: () =>
-                                    _confirmDelete(context, cateter),
-                              ),
-                            ],
-                          ),
-                        ],
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete,
+                            color: Colors.red, size: 20),
+                        onPressed: () => _confirmDelete(context, ref, cateter),
                       ),
                     ],
                   ),
+                  children: [
+                    const Divider(),
+                    const SizedBox(height: 8),
+                    _buildInfoRow(
+                      icon: Icons.calendar_today,
+                      label: 'Fecha de Inserción',
+                      value: dateFormat.format(fechaInsercion),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildInfoRow(
+                      icon: Icons.location_on,
+                      label: 'Sitio',
+                      value: cateter.sitio ?? 'No especificado',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildInfoRow(
+                      icon: Icons.place,
+                      label: 'Procedencia',
+                      value: cateter.lugarProcedencia ?? 'No especificado',
+                    ),
+                    if (fechaRetiro != null) ...[
+                      const SizedBox(height: 12),
+                      _buildInfoRow(
+                        icon: Icons.event_busy,
+                        label: 'Fecha de Retiro',
+                        value: dateFormat.format(fechaRetiro),
+                        valueColor: Colors.red,
+                      ),
+                    ],
+                  ],
                 ),
               );
             },
@@ -202,7 +201,6 @@ class _ListadoCateteresPageState extends ConsumerState<ListadoCateteresPage> {
         loading: () => const Center(
           child: CircularProgressIndicator(
             strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
           ),
         ),
         error: (err, _) => Center(
@@ -229,8 +227,8 @@ class _ListadoCateteresPageState extends ConsumerState<ListadoCateteresPage> {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () => ref
-                      .invalidate(cateteresByIngresoProvider(widget.idIngreso)),
+                  onPressed: () =>
+                      ref.invalidate(cateteresByIngresoProvider(idIngreso)),
                   child: const Text('Reintentar'),
                 ),
               ],
@@ -238,53 +236,49 @@ class _ListadoCateteresPageState extends ConsumerState<ListadoCateteresPage> {
           ),
         ),
       ),
-      floatingActionButton:
-          CreateCateterFloatingButton(idIngreso: widget.idIngreso),
+      floatingActionButton: CreateCateterFloatingButton(idIngreso: idIngreso),
     );
   }
 
-  Widget _buildDetailRow(
-      {required IconData icon, required String label, required String value}) {
+  Widget _buildInfoRow({
+    required IconData icon,
+    required String label,
+    required String value,
+    Color? valueColor,
+  }) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(icon, size: 18, color: Colors.grey.shade600),
         const SizedBox(width: 8),
-        Text(
-          label,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.grey.shade700,
-          ),
-        ),
-        const SizedBox(width: 4),
         Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(color: Colors.black87),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+              Text(
+                value,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: valueColor ?? Colors.black87,
+                ),
+              ),
+            ],
           ),
         ),
       ],
     );
   }
 
-  Widget _buildActionButton(
-      {required IconData icon,
-      required Color color,
-      required VoidCallback onPressed}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        shape: BoxShape.circle,
-      ),
-      child: IconButton(
-        icon: Icon(icon, color: color),
-        onPressed: onPressed,
-      ),
-    );
-  }
-
-  Future<void> _confirmDelete(BuildContext context, Cateter cateter) async {
-    final confirm = await showDialog<bool>(
+  void _confirmDelete(BuildContext context, WidgetRef ref, Cateter cateter) {
+    showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Confirmar eliminación"),
@@ -301,28 +295,25 @@ class _ListadoCateteresPageState extends ConsumerState<ListadoCateteresPage> {
           ),
         ],
       ),
-    );
-
-    if (confirm == true) {
-      try {
-        await ref
-            .read(cateteresRepositoryProvider)
-            .eliminarCateter(widget.idIngreso, cateter.id);
-        ref.invalidate(cateteresByIngresoProvider(widget.idIngreso));
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Catéter eliminado correctamente"),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Error al eliminar: $e"),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+    ).then((confirm) async {
+      if (confirm == true) {
+        try {
+          await ref
+              .read(deleteCateterControllerProvider.notifier)
+              .deleteCateter(idIngreso, cateter.id);
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Catéter eliminado correctamente")),
+            );
+          }
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Error al eliminar: $e")),
+            );
+          }
+        }
       }
-    }
+    });
   }
 }

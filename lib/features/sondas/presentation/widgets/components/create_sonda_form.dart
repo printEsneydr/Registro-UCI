@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../../../data/dto/create_sonda_dto.dart';
+import '../../../data/providers/sonda_provider.dart';
 import '../../controllers/create_sonda_controller.dart';
 import '../../../data/constants/constants.dart';
 
@@ -15,9 +17,10 @@ class CreateSondaForm extends ConsumerStatefulWidget {
 
 class _CreateSondaFormState extends ConsumerState<CreateSondaForm> {
   final _formKey = GlobalKey<FormState>();
-  String? regionSeleccionada;
-  String? tipoSondaSeleccionado;
-  DateTime fechaColocacion = DateTime.now();
+  String? _regionSeleccionada;
+  String? _tipoSondaSeleccionado;
+  DateTime _fechaColocacion = DateTime.now();
+  final _dateFormat = DateFormat('dd/MM/yyyy HH:mm');
 
   @override
   Widget build(BuildContext context) {
@@ -26,92 +29,141 @@ class _CreateSondaFormState extends ConsumerState<CreateSondaForm> {
     return Form(
       key: _formKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ✅ DROPDOWN REGIÓN ANATÓMICA
           DropdownButtonFormField<String>(
-            decoration: const InputDecoration(labelText: "Región Anatómica"),
-            initialValue: regionSeleccionada,
-            isExpanded: true, // ✅ Evita que el texto se corte
+            decoration: const InputDecoration(
+              labelText: "Región Anatómica",
+              prefixIcon: Icon(Icons.category),
+            ),
+            value: _regionSeleccionada,
+            isExpanded: true,
             items: sondasPorRegion.keys.map((region) {
               return DropdownMenuItem(
                 value: region,
                 child: Text(
                   region,
-                  overflow:
-                      TextOverflow.ellipsis, // ✅ Si es largo, muestra "..."
-                  maxLines: 1, // ✅ Evita desbordamiento
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               );
             }).toList(),
             onChanged: (value) {
               setState(() {
-                regionSeleccionada = value;
-                tipoSondaSeleccionado = null; // ✅ Resetea el tipo de sonda
+                _regionSeleccionada = value;
+                _tipoSondaSeleccionado = null;
               });
             },
             validator: (value) =>
                 value == null ? 'Seleccione una región anatómica' : null,
           ),
-
-          const SizedBox(height: 10),
-
-          // ✅ DROPDOWN TIPO DE SONDA
-          if (regionSeleccionada != null)
+          const SizedBox(height: 16),
+          if (_regionSeleccionada != null)
             DropdownButtonFormField<String>(
-              decoration: const InputDecoration(labelText: "Tipo de Sonda"),
-              initialValue: tipoSondaSeleccionado,
-              isExpanded: true, // ✅ Evita desbordamiento
-              items: (sondasPorRegion[regionSeleccionada] ?? [])
+              decoration: const InputDecoration(
+                labelText: "Tipo de Sonda",
+                prefixIcon: Icon(Icons.water_drop),
+              ),
+              value: _tipoSondaSeleccionado,
+              isExpanded: true,
+              items: (sondasPorRegion[_regionSeleccionada] ?? [])
                   .map((sonda) => DropdownMenuItem(
                         value: sonda,
                         child: Text(
                           sonda,
-                          overflow: TextOverflow
-                              .ellipsis, // ✅ Muestra "..." si es largo
-                          maxLines: 1, // ✅ Mantiene el texto en una sola línea
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
                       ))
                   .toList(),
               onChanged: (value) =>
-                  setState(() => tipoSondaSeleccionado = value),
+                  setState(() => _tipoSondaSeleccionado = value),
               validator: (value) =>
                   value == null ? 'Seleccione un tipo de sonda' : null,
             ),
-
           const SizedBox(height: 16),
-
-          // ✅ BOTÓN DE CREACIÓN
+          InkWell(
+            onTap: () => _selectDate(context),
+            child: InputDecorator(
+              decoration: const InputDecoration(
+                labelText: "Fecha de Colocación",
+                prefixIcon: Icon(Icons.calendar_today),
+              ),
+              child: Text(
+                _dateFormat.format(_fechaColocacion.toLocal()),
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
           ElevatedButton(
             onPressed: createSondaState.isLoading
                 ? null
-                : () {
-                    if (_formKey.currentState!.validate()) {
-                      final dto = CreateSondaDto(
-                        tipo: tipoSondaSeleccionado!,
-                        regionAnatomica: regionSeleccionada!,
-                        fechaColocacion: fechaColocacion,
-                        idIngreso: widget.idIngreso,
-                      );
-                      ref
-                          .read(createSondaControllerProvider.notifier)
-                          .createSonda(dto)
-                          .then((_) {
-                        Navigator.pop(
-                            context); // ✅ Cierra la pantalla después de crear
-                      }).catchError((error) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text("Error al crear sonda: $error")),
-                        );
-                      });
-                    }
-                  },
+                : () => _createSonda(createSondaState),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+            ),
             child: createSondaState.isLoading
-                ? const CircularProgressIndicator()
+                ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
                 : const Text("Crear Sonda"),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _fechaColocacion,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedDate != null && mounted) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(_fechaColocacion),
+      );
+
+      if (pickedTime != null) {
+        setState(() {
+          _fechaColocacion = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+        });
+      }
+    }
+  }
+
+  void _createSonda(AsyncValue<void> createSondaState) {
+    if (_formKey.currentState!.validate()) {
+      final dto = CreateSondaDto(
+        tipo: _tipoSondaSeleccionado!,
+        regionAnatomica: _regionSeleccionada!,
+        fechaColocacion: _fechaColocacion,
+        idIngreso: widget.idIngreso,
+      );
+
+      ref
+          .read(createSondaControllerProvider.notifier)
+          .createSonda(dto)
+          .then((_) {
+        ref.invalidate(sondasProvider(widget.idIngreso));
+        Navigator.pop(context);
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error al crear sonda: $error")),
+        );
+      });
+    }
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:registro_uci/common/providers/repository_providers.dart';
 
 // Define a class to hold the parameters
@@ -31,12 +30,11 @@ class BalanceParams {
 final totalBalanceProvider =
     FutureProvider.family<Map<String, dynamic>, BalanceParams>(
         (ref, params) async {
-  final doc = await FirebaseFirestore.instance
-      .collection('ingresos')
-      .doc(params.idIngreso)
-      .collection('registrosDiarios')
-      .doc(params.idRegistroDiario)
-      .get();
+  final repository = ref.watch(balancesDeLiquidosRepositoryProvider);
+  final doc = await repository.getBalanceDeLiquidosDoc(
+    params.idIngreso,
+    params.idRegistroDiario,
+  );
   final data = doc.data() ?? {};
   return {
     'totalAdministrados': data['totalAdministrados'] ?? 0,
