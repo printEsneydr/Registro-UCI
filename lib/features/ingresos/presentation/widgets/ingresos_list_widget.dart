@@ -8,7 +8,9 @@ import 'package:registro_uci/features/ingresos/domain/models/ingreso.dart';
 enum IngresoFilter { activos, terminados, todos }
 
 class IngresosListWidget extends ConsumerStatefulWidget {
-  const IngresosListWidget({super.key});
+  final String searchQuery;
+
+  const IngresosListWidget({super.key, this.searchQuery = ""});
 
   @override
   ConsumerState<IngresosListWidget> createState() => _IngresosListWidgetState();
@@ -19,7 +21,6 @@ class _IngresosListWidgetState extends ConsumerState<IngresosListWidget>
   late TabController _tabController;
   Sala selectedSala = Sala.A;
   IngresoFilter filter = IngresoFilter.activos;
-  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -37,7 +38,6 @@ class _IngresosListWidgetState extends ConsumerState<IngresosListWidget>
   @override
   void dispose() {
     _tabController.dispose();
-    _searchController.dispose();
     super.dispose();
   }
 
@@ -58,34 +58,6 @@ class _IngresosListWidgetState extends ConsumerState<IngresosListWidget>
             value: selectedSala.name,
             values: Sala.values.map((sala) => sala.name).toList(),
             prefixIcon: const Icon(Icons.filter_list),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              hintText: "Buscar por nombre...",
-              prefixIcon: const Icon(Icons.search),
-              suffixIcon: _searchController.text.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        _searchController.clear();
-                        setState(() {});
-                      },
-                    )
-                  : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-            ),
-            onChanged: (value) {
-              setState(() {});
-            },
           ),
         ),
         const SizedBox(height: 10),
@@ -116,15 +88,15 @@ class _IngresosListWidgetState extends ConsumerState<IngresosListWidget>
               IngresosList(
                   selectedSala: selectedSala,
                   filter: IngresoFilter.activos,
-                  searchQuery: _searchController.text),
+                  searchQuery: widget.searchQuery),
               IngresosList(
                   selectedSala: selectedSala,
                   filter: IngresoFilter.terminados,
-                  searchQuery: _searchController.text),
+                  searchQuery: widget.searchQuery),
               IngresosList(
                   selectedSala: selectedSala,
                   filter: IngresoFilter.todos,
-                  searchQuery: _searchController.text),
+                  searchQuery: widget.searchQuery),
             ],
           ),
         ),
