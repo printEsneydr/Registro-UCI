@@ -12,4 +12,6 @@ abstract class IngresosRepository {
   Future<Ingreso?> getIngresoById(String idIngreso);
 
   Future<List<Ingreso>> getIngresosBySala(Sala sala);
+
+  Future<void> terminarIngreso(String idIngreso, DateTime fechaFin);
 }

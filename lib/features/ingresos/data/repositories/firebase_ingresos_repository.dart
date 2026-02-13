@@ -87,4 +87,20 @@ class FirebaseIngresosRepository implements IngresosRepository {
             id: doc.id)) // Assuming you have a fromJson method
         .toList();
   }
+
+  @override
+  Future<void> terminarIngreso(String idIngreso, DateTime fechaFin) async {
+    try {
+      final docRef = _firestore
+          .collection(FirebaseCollectionNames.ingresos)
+          .doc(idIngreso);
+
+      await docRef.update({
+        Strings.fechaFin: fechaFin,
+      });
+    } catch (e) {
+      log('Error terminating ingreso: $e');
+      throw Exception('Error al terminar el ingreso');
+    }
+  }
 }
