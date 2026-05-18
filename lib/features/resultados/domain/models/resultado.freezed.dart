@@ -20,7 +20,9 @@ mixin _$Resultado {
   String get idNOC => throw _privateConstructorUsedError;
   String get nombre => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Resultado
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ResultadoCopyWith<Resultado> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -43,6 +45,8 @@ class _$ResultadoCopyWithImpl<$Res, $Val extends Resultado>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Resultado
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +90,8 @@ class __$$ResultadoImplCopyWithImpl<$Res>
       _$ResultadoImpl _value, $Res Function(_$ResultadoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Resultado
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -142,7 +148,9 @@ class _$ResultadoImpl implements _Resultado {
   @override
   int get hashCode => Object.hash(runtimeType, idResultado, idNOC, nombre);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Resultado
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ResultadoImplCopyWith<_$ResultadoImpl> get copyWith =>
@@ -161,8 +169,11 @@ abstract class _Resultado implements Resultado {
   String get idNOC;
   @override
   String get nombre;
+
+  /// Create a copy of Resultado
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ResultadoImplCopyWith<_$ResultadoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

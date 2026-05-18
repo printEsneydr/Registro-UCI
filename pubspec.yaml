@@ -50,6 +50,7 @@ dev_dependencies:
   build_runner: ^2.4.11
   freezed: ^2.5.2
   json_serializable: ^6.8.0
+  flutter_launcher_icons: ^0.14.3
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -63,6 +64,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/logo.png
+    - assets/images/logo_sabana_UCI.png
     - assets/images/background.jpg
   #   - images/a_dot_ham.jpeg
 
@@ -77,7 +79,25 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo_sabana_UCI.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/logo_sabana_UCI.png"
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/images/logo_sabana_UCI.png"
+  windows:
+    generate: true
+    image_path: "assets/images/logo_sabana_UCI.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/images/logo_sabana_UCI.png"
+
+fonts:
     - family: Sacramento
       fonts:
         - asset: fonts/Sacramento/Sacramento-Regular.ttf

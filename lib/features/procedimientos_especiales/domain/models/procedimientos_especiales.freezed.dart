@@ -20,7 +20,9 @@ mixin _$ProcedimientoEspecial {
   String get nombreProcedimiento => throw _privateConstructorUsedError;
   String get estado => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProcedimientoEspecial
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ProcedimientoEspecialCopyWith<ProcedimientoEspecial> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -46,6 +48,8 @@ class _$ProcedimientoEspecialCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ProcedimientoEspecial
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -92,6 +96,8 @@ class __$$ProcedimientoEspecialImplCopyWithImpl<$Res>
       $Res Function(_$ProcedimientoEspecialImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ProcedimientoEspecial
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -152,7 +158,9 @@ class _$ProcedimientoEspecialImpl implements _ProcedimientoEspecial {
   int get hashCode =>
       Object.hash(runtimeType, idProcedimiento, nombreProcedimiento, estado);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProcedimientoEspecial
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ProcedimientoEspecialImplCopyWith<_$ProcedimientoEspecialImpl>
@@ -172,8 +180,11 @@ abstract class _ProcedimientoEspecial implements ProcedimientoEspecial {
   String get nombreProcedimiento;
   @override
   String get estado;
+
+  /// Create a copy of ProcedimientoEspecial
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ProcedimientoEspecialImplCopyWith<_$ProcedimientoEspecialImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "co.edu.umariana" "\0"
-            VALUE "FileDescription", "registro_uci" "\0"
+            VALUE "FileDescription", "Sabana UCI" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "registro_uci" "\0"
+            VALUE "InternalName", "Sabana UCI" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 co.edu.umariana. All rights reserved." "\0"
-            VALUE "OriginalFilename", "registro_uci.exe" "\0"
-            VALUE "ProductName", "registro_uci" "\0"
+            VALUE "OriginalFilename", "sabana_uci.exe" "\0"
+            VALUE "ProductName", "Sabana UCI" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

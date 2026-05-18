@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:registro_uci/common/providers/repository_providers.dart';
 import 'package:registro_uci/features/monitorias_hemodinamicas/data/providers/monitoria_hemodinamica_provider.dart';
@@ -595,6 +596,11 @@ class EditMonitoriaScreenState extends ConsumerState<EditMonitoriaScreen> {
       ),
       style: theme.textTheme.bodyLarge,
       keyboardType: TextInputType.numberWithOptions(decimal: decimal),
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(
+          decimal ? RegExp(r'[0-9.]') : RegExp(r'[0-9]'),
+        ),
+      ],
       initialValue: value?.toString(),
       onChanged: (v) {
         if (v.isEmpty) {

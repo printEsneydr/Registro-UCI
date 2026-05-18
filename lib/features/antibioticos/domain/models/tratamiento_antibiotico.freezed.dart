@@ -24,7 +24,9 @@ mixin _$TratamientoAntibiotico {
   DateTime get fechaInicio => throw _privateConstructorUsedError;
   DateTime? get fechaFin => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TratamientoAntibiotico
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TratamientoAntibioticoCopyWith<TratamientoAntibiotico> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,6 +58,8 @@ class _$TratamientoAntibioticoCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TratamientoAntibiotico
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -129,6 +133,8 @@ class __$$TratamientoAntibioticoImplCopyWithImpl<$Res>
       $Res Function(_$TratamientoAntibioticoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TratamientoAntibiotico
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -230,7 +236,9 @@ class _$TratamientoAntibioticoImpl implements _TratamientoAntibiotico {
   int get hashCode => Object.hash(runtimeType, idTratamientoAntibiotico,
       antibiotico, dosis, cantidad, frecuenciaEn24h, fechaInicio, fechaFin);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TratamientoAntibiotico
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TratamientoAntibioticoImplCopyWith<_$TratamientoAntibioticoImpl>
@@ -262,8 +270,11 @@ abstract class _TratamientoAntibiotico implements TratamientoAntibiotico {
   DateTime get fechaInicio;
   @override
   DateTime? get fechaFin;
+
+  /// Create a copy of TratamientoAntibiotico
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TratamientoAntibioticoImplCopyWith<_$TratamientoAntibioticoImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

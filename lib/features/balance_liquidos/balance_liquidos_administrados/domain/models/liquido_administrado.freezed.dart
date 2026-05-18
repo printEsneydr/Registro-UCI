@@ -24,7 +24,9 @@ mixin _$LiquidoAdministrado {
   DateTime get hora => throw _privateConstructorUsedError;
   bool get esTratamiento => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LiquidoAdministrado
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LiquidoAdministradoCopyWith<LiquidoAdministrado> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -55,6 +57,8 @@ class _$LiquidoAdministradoCopyWithImpl<$Res, $Val extends LiquidoAdministrado>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LiquidoAdministrado
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -125,6 +129,8 @@ class __$$LiquidoAdministradoImplCopyWithImpl<$Res>
       $Res Function(_$LiquidoAdministradoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LiquidoAdministrado
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -224,7 +230,9 @@ class _$LiquidoAdministradoImpl implements _LiquidoAdministrado {
   int get hashCode => Object.hash(runtimeType, idLiquidoAdministrado,
       medicamento, cantidad, comentario, dosis, hora, esTratamiento);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LiquidoAdministrado
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LiquidoAdministradoImplCopyWith<_$LiquidoAdministradoImpl> get copyWith =>
@@ -256,8 +264,11 @@ abstract class _LiquidoAdministrado implements LiquidoAdministrado {
   DateTime get hora;
   @override
   bool get esTratamiento;
+
+  /// Create a copy of LiquidoAdministrado
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LiquidoAdministradoImplCopyWith<_$LiquidoAdministradoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

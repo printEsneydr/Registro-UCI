@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../../data/constants/constants.dart';
 import '../../data/repositories/firabase_control_de_riesgos.dart';
@@ -314,6 +315,7 @@ class _UpdateControlRiesgosFormState extends State<UpdateControlRiesgosForm> {
           child: TextField(
             controller: controller,
             keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
             onChanged: (value) {
               setState(() {});
             },
@@ -506,6 +508,7 @@ class _UpdateControlRiesgosFormState extends State<UpdateControlRiesgosForm> {
               TextField(
                 controller: numeroReporteEAController,
                 keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
                 decoration: const InputDecoration(
                   hintText: 'Ingrese reporte EA',
                   enabledBorder: OutlineInputBorder(
@@ -701,6 +704,7 @@ class _UpdateControlRiesgosFormState extends State<UpdateControlRiesgosForm> {
               TextField(
                 controller: numeroReporteCaidaController,
                 keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
                 decoration: const InputDecoration(
                   hintText: 'Ingrese numero reporte de caída',
                   enabledBorder: OutlineInputBorder(

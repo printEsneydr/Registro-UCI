@@ -120,8 +120,8 @@ class ControlDeRiesgosPage extends ConsumerWidget {
                                 IconButton(
                                   icon: const Icon(Icons.delete,
                                       color: Colors.red, size: 20),
-                                  onPressed: () => _confirmDelete(
-                                      context, ref, registro),
+                                  onPressed: () =>
+                                      _confirmDelete(context, ref, registro),
                                 ),
                               ],
                             ),
@@ -141,10 +141,16 @@ class ControlDeRiesgosPage extends ConsumerWidget {
                         Row(
                           children: [
                             _buildRiskChip(
-                                'UPP', registro.riesgoUPP ?? 'Sin riesgo'),
+                                'UPP',
+                                registro.riesgoUPP.isEmpty
+                                    ? 'Sin riesgo'
+                                    : registro.riesgoUPP),
                             const SizedBox(width: 8),
                             _buildRiskChip(
-                                'Caída', registro.riesgoCaida ?? 'Sin riesgo'),
+                                'Caída',
+                                registro.riesgoCaida.isEmpty
+                                    ? 'Sin riesgo'
+                                    : registro.riesgoCaida),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -207,7 +213,10 @@ class ControlDeRiesgosPage extends ConsumerWidget {
                 ElevatedButton(
                   onPressed: () => ref.invalidate(
                     controlDeRiesgosByIngresoProvider(
-                      (idIngreso: idIngreso, idRegistroDiario: idRegistroDiario),
+                      (
+                        idIngreso: idIngreso,
+                        idRegistroDiario: idRegistroDiario
+                      ),
                     ),
                   ),
                   child: const Text('Reintentar'),
@@ -347,7 +356,8 @@ class ControlDeRiesgosPage extends ConsumerWidget {
                   _buildDetailRow(
                       'Fecha inicio',
                       registro.fechaInicioAislamiento != null
-                          ? dateOnlyFormat.format(registro.fechaInicioAislamiento!)
+                          ? dateOnlyFormat
+                              .format(registro.fechaInicioAislamiento!)
                           : 'No disponible'),
                   _buildDetailRow(
                       'Fecha fin',
@@ -443,8 +453,7 @@ class ControlDeRiesgosPage extends ConsumerWidget {
               );
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content: Text('Registro eliminado correctamente')),
+              const SnackBar(content: Text('Registro eliminado correctamente')),
             );
           }
         } catch (e) {

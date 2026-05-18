@@ -9,6 +9,7 @@ import 'package:registro_uci/features/registros_diarios/presentation/widgets/com
 import 'package:registro_uci/features/registros_diarios/presentation/widgets/components/tiles/control_de_posicion_tile.dart';
 import 'package:registro_uci/features/registros_diarios/presentation/widgets/components/tiles/control_de_riesgos_tile.dart';
 import 'package:registro_uci/features/registros_diarios/presentation/widgets/components/tiles/control_de_sedacion_tile.dart';
+import 'package:registro_uci/features/registros_diarios/presentation/widgets/components/tiles/glasgow_tile.dart';
 import 'package:registro_uci/features/registros_diarios/presentation/widgets/components/tiles/monitorias_hemodinamicas_tile.dart';
 import 'package:registro_uci/features/registros_diarios/presentation/widgets/components/tiles/necesidades_tile.dart';
 import 'package:registro_uci/features/registros_diarios/presentation/widgets/components/tiles/tratamientos_tile.dart';
@@ -88,6 +89,14 @@ class RegistroDiarioPage extends ConsumerWidget {
                 idRegistro: registroDiario.idRegistroDiario,
                 completed:
                     false, // Cambiar a verdadero o falso según el estado real
+              ),
+              const SizedBox(height: 10),
+
+              // Escala de Glasgow Tile
+              GlasgowTile(
+                idIngreso: idIngreso,
+                idRegistro: registroDiario.idRegistroDiario,
+                completed: false,
               ),
               const SizedBox(height: 10),
 

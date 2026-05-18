@@ -20,7 +20,9 @@ mixin _$BalanceDeLiquidos {
   int get hora => throw _privateConstructorUsedError;
   int get orden => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BalanceDeLiquidos
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BalanceDeLiquidosCopyWith<BalanceDeLiquidos> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -44,6 +46,8 @@ class _$BalanceDeLiquidosCopyWithImpl<$Res, $Val extends BalanceDeLiquidos>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BalanceDeLiquidos
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -87,6 +91,8 @@ class __$$BalanceDeLiquidosImplCopyWithImpl<$Res>
       $Res Function(_$BalanceDeLiquidosImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of BalanceDeLiquidos
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -146,7 +152,9 @@ class _$BalanceDeLiquidosImpl implements _BalanceDeLiquidos {
   int get hashCode =>
       Object.hash(runtimeType, idBalanceDeLiquidos, hora, orden);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BalanceDeLiquidos
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BalanceDeLiquidosImplCopyWith<_$BalanceDeLiquidosImpl> get copyWith =>
@@ -166,8 +174,11 @@ abstract class _BalanceDeLiquidos implements BalanceDeLiquidos {
   int get hora;
   @override
   int get orden;
+
+  /// Create a copy of BalanceDeLiquidos
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BalanceDeLiquidosImplCopyWith<_$BalanceDeLiquidosImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

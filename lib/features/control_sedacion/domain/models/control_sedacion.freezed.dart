@@ -22,7 +22,9 @@ mixin _$ControlSedacion {
   int get orden => throw _privateConstructorUsedError;
   int get rass => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ControlSedacion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ControlSedacionCopyWith<ControlSedacion> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -46,6 +48,8 @@ class _$ControlSedacionCopyWithImpl<$Res, $Val extends ControlSedacion>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ControlSedacion
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -99,6 +103,8 @@ class __$$ControlSedacionImplCopyWithImpl<$Res>
       _$ControlSedacionImpl _value, $Res Function(_$ControlSedacionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ControlSedacion
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -176,7 +182,9 @@ class _$ControlSedacionImpl implements _ControlSedacion {
   int get hashCode =>
       Object.hash(runtimeType, id, hora, observacion, orden, rass);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ControlSedacion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ControlSedacionImplCopyWith<_$ControlSedacionImpl> get copyWith =>
@@ -202,8 +210,11 @@ abstract class _ControlSedacion implements ControlSedacion {
   int get orden;
   @override
   int get rass;
+
+  /// Create a copy of ControlSedacion
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ControlSedacionImplCopyWith<_$ControlSedacionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

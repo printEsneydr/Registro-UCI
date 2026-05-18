@@ -23,8 +23,12 @@ UpdateProcedimientoDto _$UpdateProcedimientoDtoFromJson(
 mixin _$UpdateProcedimientoDto {
   String get estado => throw _privateConstructorUsedError;
 
+  /// Serializes this UpdateProcedimientoDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UpdateProcedimientoDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UpdateProcedimientoDtoCopyWith<UpdateProcedimientoDto> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +53,8 @@ class _$UpdateProcedimientoDtoCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UpdateProcedimientoDto
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -85,6 +91,8 @@ class __$$UpdateProcedimientoDtoImplCopyWithImpl<$Res>
       $Res Function(_$UpdateProcedimientoDtoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UpdateProcedimientoDto
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -123,11 +131,13 @@ class _$UpdateProcedimientoDtoImpl implements _UpdateProcedimientoDto {
             (identical(other.estado, estado) || other.estado == estado));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, estado);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UpdateProcedimientoDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UpdateProcedimientoDtoImplCopyWith<_$UpdateProcedimientoDtoImpl>
@@ -151,8 +161,11 @@ abstract class _UpdateProcedimientoDto implements UpdateProcedimientoDto {
 
   @override
   String get estado;
+
+  /// Create a copy of UpdateProcedimientoDto
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UpdateProcedimientoDtoImplCopyWith<_$UpdateProcedimientoDtoImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

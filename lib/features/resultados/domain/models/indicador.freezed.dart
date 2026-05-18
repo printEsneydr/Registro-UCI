@@ -19,7 +19,9 @@ mixin _$Indicador {
   String get idIndicador => throw _privateConstructorUsedError;
   String get descripcion => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Indicador
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $IndicadorCopyWith<Indicador> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -42,6 +44,8 @@ class _$IndicadorCopyWithImpl<$Res, $Val extends Indicador>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Indicador
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -80,6 +84,8 @@ class __$$IndicadorImplCopyWithImpl<$Res>
       _$IndicadorImpl _value, $Res Function(_$IndicadorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Indicador
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -128,7 +134,9 @@ class _$IndicadorImpl implements _Indicador {
   @override
   int get hashCode => Object.hash(runtimeType, idIndicador, descripcion);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Indicador
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$IndicadorImplCopyWith<_$IndicadorImpl> get copyWith =>
@@ -144,8 +152,11 @@ abstract class _Indicador implements Indicador {
   String get idIndicador;
   @override
   String get descripcion;
+
+  /// Create a copy of Indicador
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$IndicadorImplCopyWith<_$IndicadorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -19,7 +19,9 @@ mixin _$Necesidad {
   String get idNecesidad => throw _privateConstructorUsedError;
   String get nombreNecesidad => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Necesidad
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $NecesidadCopyWith<Necesidad> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -42,6 +44,8 @@ class _$NecesidadCopyWithImpl<$Res, $Val extends Necesidad>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Necesidad
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -80,6 +84,8 @@ class __$$NecesidadImplCopyWithImpl<$Res>
       _$NecesidadImpl _value, $Res Function(_$NecesidadImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Necesidad
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -129,7 +135,9 @@ class _$NecesidadImpl implements _Necesidad {
   @override
   int get hashCode => Object.hash(runtimeType, idNecesidad, nombreNecesidad);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Necesidad
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$NecesidadImplCopyWith<_$NecesidadImpl> get copyWith =>
@@ -145,8 +153,11 @@ abstract class _Necesidad implements Necesidad {
   String get idNecesidad;
   @override
   String get nombreNecesidad;
+
+  /// Create a copy of Necesidad
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$NecesidadImplCopyWith<_$NecesidadImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

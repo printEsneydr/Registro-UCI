@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:registro_uci/common/components/form_tile.dart';
+import 'package:registro_uci/pages/lista_tratamientos/lista_tratamientos_page.dart';
 
 class TratamientosTile extends StatelessWidget {
   const TratamientosTile({
@@ -20,7 +21,14 @@ class TratamientosTile extends StatelessWidget {
       title: "Lista de Tratamientos",
       subtitle: "Tratamientos administrados y planificados",
       onTap: () {
-        // Add navigation logic here
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ListaTratamientosPage(
+              idIngreso: idIngreso,
+              idRegistroDiario: idRegistro,
+            ),
+          ),
+        );
       },
     );
   }

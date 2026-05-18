@@ -22,7 +22,8 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
       idIngreso: idIngreso,
       idRegistroDiario: idRegistroDiario,
     );
-    final monitoriasData = ref.watch(monitoriasHemodinamicasStreamProvider(params));
+    final monitoriasData =
+        ref.watch(monitoriasHemodinamicasStreamProvider(params));
 
     return Card(
       margin: const EdgeInsets.all(16.0),
@@ -176,7 +177,30 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
     WidgetRef ref,
   ) {
     const hours = [
-      8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
     ];
 
     return hours.map((hour) {
@@ -190,7 +214,8 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
       );
       final hasRecord = record.idMonitoria.isNotEmpty;
 
-      return _buildTimeCard(context, ref, hour: hour, hasRecord: hasRecord, record: record);
+      return _buildTimeCard(context, ref,
+          hour: hour, hasRecord: hasRecord, record: record);
     }).toList();
   }
 
@@ -215,7 +240,8 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
               const SizedBox(width: 12),
               _buildTimeLabel(hour, hasRecord),
               const Spacer(),
-              _buildActionButtons(context, ref, hour, hasRecord, record.idMonitoria),
+              _buildActionButtons(
+                  context, ref, hour, hasRecord, record.idMonitoria),
             ],
           ),
         ),
@@ -296,9 +322,11 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
       ],
     );
   }
+
   String _formatHour(int hour) {
-    final hour12 = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
-    return '${hour.toString().padLeft(2, '0')}:00 ${hour < 12 ? 'AM' : 'PM'}';
+    final hourFormatted = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+    final period = hour < 12 ? 'AM' : 'PM';
+    return '${hourFormatted.toString().padLeft(2, '0')}:00 $period';
   }
 
   void _showDetails(BuildContext context, MonitoriaHemodinamica record) {
@@ -370,7 +398,8 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
     );
   }
 
-  void _editForm(BuildContext context, {required int hour, required String idMonitoria}) {
+  void _editForm(BuildContext context,
+      {required int hour, required String idMonitoria}) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -385,7 +414,8 @@ class MonitoriaHemodinamicaCard extends ConsumerWidget {
     );
   }
 
-  void _confirmDelete(BuildContext context, WidgetRef ref, String idMonitoria, int hour) {
+  void _confirmDelete(
+      BuildContext context, WidgetRef ref, String idMonitoria, int hour) {
     showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(

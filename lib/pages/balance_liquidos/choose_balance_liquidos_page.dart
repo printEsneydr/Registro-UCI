@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:registro_uci/features/balance_liquidos/balance_liquidos_administrados/data/providers/liquidos_administrados_provider.dart';
+import 'package:registro_uci/features/balance_liquidos/balance_liquidos_eliminados/data/providers/liquidos_eliminados_provider.dart';
 import 'package:registro_uci/features/balance_liquidos/data/providers/balances_de_liquidos_provider.dart';
 import 'package:registro_uci/features/balance_liquidos/domain/models/balance_de_liquidos.dart';
 import 'package:registro_uci/pages/balance_liquidos/liquidos_administrados_screen.dart';
+import 'package:registro_uci/pages/balance_liquidos/liquidos_eliminados_screen.dart';
 
 class ChooseBalanceLiquidosPage extends StatelessWidget {
   final BalancesDeLiquidosParams params;
@@ -50,10 +52,18 @@ class ChooseBalanceLiquidosPage extends StatelessWidget {
               icon: Icons.delete_outline,
               color: const Color(0xFF6ABF69), // Soft green color
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => LiquidosEliminadosPage()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LiquidosEliminadosScreen(
+                      params: LiquidosEliminadosParams(
+                        idIngreso: params.idIngreso,
+                        idRegistroDiario: params.idRegistroDiario,
+                        idBalanceLiquidos: balance.idBalanceDeLiquidos,
+                      ),
+                    ),
+                  ),
+                );
               },
             ),
           ],

@@ -111,12 +111,14 @@ String? Function(String?) otherEpsArlValidator = (String? value) {
   return null;
 };
 
-// Validación del teléfono, asegurando entre 7 y 15 dígitos
+// Validación del teléfono para Colombia (exactamente 10 dígitos)
 String? Function(String?) telefonoFamiliarValidator = (String? value) {
   if (value == null || value.isEmpty) {
     return 'Este campo es obligatorio';
-  } else if (!RegExp(r'^\d{7,15}$').hasMatch(value)) {
-    return 'El número debe tener entre 7 y 15 dígitos';
+  } else if (!RegExp(r'^\d+$').hasMatch(value)) {
+    return 'Solo se permiten números';
+  } else if (value.length != 10) {
+    return 'El número telefónico debe contener 10 dígitos';
   }
   return null;
 };

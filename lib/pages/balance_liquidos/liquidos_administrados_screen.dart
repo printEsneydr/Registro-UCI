@@ -29,11 +29,32 @@ class LiquidosAdministradosScreen extends ConsumerWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            color: Colors.blue.shade100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.access_time, size: 28),
+                const SizedBox(width: 8),
+                Text(
+                  'Hora ${params.idBalanceLiquidos}:00',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              "Registro ${params.idBalanceLiquidos}:00 a.m.\n${params.idRegistroDiario}\n",
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text(
+                "Fecha: ${params.idRegistroDiario}",
+                style: const TextStyle(fontSize: 14),
+              ),
             ),
           ),
           Expanded(

@@ -3,10 +3,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart'; // For formatting the date
 import 'package:registro_uci/pages/balance_liquidos/providers.dart';
 
-class BalanceCard extends ConsumerWidget {
+class BalanceCard extends ConsumerStatefulWidget {
   final String idIngreso;
   final String idRegistroDiario;
 
@@ -17,11 +16,100 @@ class BalanceCard extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Retrieve the current balance data
-    final balanceParams =
-        BalanceParams(idIngreso: idIngreso, idRegistroDiario: idRegistroDiario);
-    final balanceData = ref.watch(totalBalanceProvider(balanceParams));
+  ConsumerState<BalanceCard> createState() => _BalanceCardState();
+}
+
+class _BalanceCardState extends ConsumerState<BalanceCard> {
+  int _horaSeleccionada = 8;
+  bool _cargando = true;
+
+  List<int> _generarHoras() {
+    final horas = <int>[];
+    // Horas 8 a 24
+    for (var i = 8; i <= 24; i++) {
+      horas.add(i);
+    }
+    // Horas 1 a 7 (día siguiente)
+    for (var i = 1; i <= 7; i++) {
+      horas.add(i);
+    }
+    return horas;
+  }
+
+  String _formatHora(int hora) {
+    if (hora <= 24) {
+      return 'Hasta las $hora:00';
+    } else {
+      final horaReal = hora - 24;
+      return 'Hasta las $horaReal:00 (día sig.)';
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarHoraInicial();
+  }
+
+  Future<void> _cargarHoraInicial() async {
+    try {
+      final firestore = FirebaseFirestore.instance;
+      final doc = await firestore
+          .collection('ingresos')
+          .doc(widget.idIngreso)
+          .collection('registrosDiarios')
+          .doc(widget.idRegistroDiario)
+          .get();
+      final data = doc.data() ?? {};
+      final horaCalculada =
+          (data['totalAdministradoCalculatedUntil'] as num?)?.toInt() ?? 8;
+      if (mounted) {
+        setState(() {
+          _horaSeleccionada = horaCalculada > 0 ? horaCalculada : 8;
+          _cargando = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _cargando = false;
+        });
+      }
+    }
+  }
+
+  void _recargar() {
+    ref.invalidate(totalBalanceProvider(BalanceParams(
+      idIngreso: widget.idIngreso,
+      idRegistroDiario: widget.idRegistroDiario,
+    )));
+    ref.invalidate(balancePorHoraProvider(BalancePorHoraParams(
+      idIngreso: widget.idIngreso,
+      idRegistroDiario: widget.idRegistroDiario,
+      hora: _horaSeleccionada,
+    )));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_cargando) {
+      return const Card(
+        child: Padding(
+          padding: EdgeInsets.all(32),
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
+
+    final horasDisponibles = _generarHoras();
+    final balancePorHoraParams = BalancePorHoraParams(
+      idIngreso: widget.idIngreso,
+      idRegistroDiario: widget.idRegistroDiario,
+      hora: _horaSeleccionada,
+    );
+
+    final balanceHoraData =
+        ref.watch(balancePorHoraProvider(balancePorHoraParams));
 
     return Card(
       margin: const EdgeInsets.all(16.0),
@@ -31,43 +119,153 @@ class BalanceCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Balance Acumulado',
-              style: Theme.of(context).textTheme.titleLarge,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Balance de Líquidos',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: _recargar,
+                  tooltip: 'Recargar datos',
+                ),
+              ],
             ),
-            const SizedBox(height: 8.0),
-            balanceData.when(
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade100,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: DropdownButton<int>(
+                value: _horaSeleccionada,
+                isExpanded: true,
+                underline: const SizedBox(),
+                items: horasDisponibles
+                    .map((hora) => DropdownMenuItem(
+                          value: hora,
+                          child: Text(_formatHora(hora)),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      _horaSeleccionada = value;
+                    });
+                    ref.invalidate(balancePorHoraProvider(BalancePorHoraParams(
+                      idIngreso: widget.idIngreso,
+                      idRegistroDiario: widget.idRegistroDiario,
+                      hora: value,
+                    )));
+                  }
+                },
+              ),
+            ),
+            const SizedBox(height: 12),
+            balanceHoraData.when(
               data: (data) {
-                // Format fechaCalculoTotalAdministrados if it exists
-                final fechaCalculoTotalAdministrados =
-                    data['fechaCalculoTotalAdministrados'] != null
-                        ? DateFormat.yMd().add_jm().format(
-                            (data['fechaCalculoTotalAdministrados']
-                                    as Timestamp)
-                                .toDate())
-                        : 'No disponible';
-                final totalAdministrados = data['totalAdministrados'] ?? 0;
-                final totalUntil =
-                    data['totalAdministradoCalculatedUntil'] ?? 0;
+                final totalAdministrados =
+                    (data['totalAdministrados'] as num?)?.toInt() ?? 0;
+                final totalEliminados =
+                    (data['totalEliminados'] as num?)?.toInt() ?? 0;
+                final balance = (data['balance'] as num?)?.toInt() ?? 0;
+
+                final isPositive = balance >= 0;
+                final balanceColor = balance > 0
+                    ? Colors.green
+                    : balance < 0
+                        ? Colors.red
+                        : Colors.grey;
+
+                final String estadoMensaje;
+                if (balance > 200) {
+                  estadoMensaje = '⚠️ Retención significativa';
+                } else if (balance < -200) {
+                  estadoMensaje = '⚠️ Pérdida significativa';
+                } else if (balance > 0) {
+                  estadoMensaje = '✓ Retención normal';
+                } else if (balance < 0) {
+                  estadoMensaje = '⚠️ Pérdida';
+                } else {
+                  estadoMensaje = '= Balanceado';
+                }
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Total Administrados: $totalAdministrados'),
-                    Text('Fecha de Cálculo: $fechaCalculoTotalAdministrados'),
-                    Text('Cálculo Hasta la Hora: $totalUntil'),
-                    const SizedBox(height: 16.0),
-                    ElevatedButton(
-                      onPressed: () {
-                        _showUpdateDialog(context, ref);
-                      },
-                      child: const Text('Actualizar Cálculo'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _buildColumn(
+                            'Admin.', '$totalAdministrados', Colors.green),
+                        _buildColumn(
+                            'Elim.', '$totalEliminados', Colors.orange),
+                        _buildColumn(
+                          'Balance',
+                          '${isPositive ? '+' : ''}$balance',
+                          balanceColor,
+                          isBold: true,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: balanceColor.withAlpha(30),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Text(
+                        estadoMensaje,
+                        style: TextStyle(
+                          color: balanceColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        const Icon(Icons.access_time,
+                            size: 14, color: Colors.grey),
+                        const SizedBox(width: 4),
+                        Text(
+                          _formatHora(_horaSeleccionada),
+                          style:
+                              const TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ],
                     ),
                   ],
                 );
               },
-              loading: () => const CircularProgressIndicator(),
-              error: (error, _) => Text('Error: $error'),
+              loading: () => const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(32),
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+              error: (error, _) => Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      const Icon(Icons.error, color: Colors.red),
+                      const SizedBox(height: 8),
+                      Text('Error: $error'),
+                      const SizedBox(height: 8),
+                      ElevatedButton(
+                        onPressed: _recargar,
+                        child: const Text('Reintentar'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -75,104 +273,20 @@ class BalanceCard extends ConsumerWidget {
     );
   }
 
-  // Method to show the update dialog
-  void _showUpdateDialog(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Selecciona la Hora'),
-          content: UpdateCalculationDialogContent(
-            idIngreso: idIngreso,
-            idRegistroDiario: idRegistroDiario,
-          ),
-        );
-      },
-    );
-  }
-}
-
-class UpdateCalculationDialogContent extends ConsumerStatefulWidget {
-  final String idIngreso;
-  final String idRegistroDiario;
-
-  const UpdateCalculationDialogContent({
-    super.key,
-    required this.idIngreso,
-    required this.idRegistroDiario,
-  });
-
-  @override
-  _UpdateCalculationDialogContentState createState() =>
-      _UpdateCalculationDialogContentState();
-}
-
-class _UpdateCalculationDialogContentState
-    extends ConsumerState<UpdateCalculationDialogContent> {
-  int selectedHora = 8; // Default starting hour
-
-  @override
-  Widget build(BuildContext context) {
-    final orderedHours = List<int>.generate(
-      24,
-      (i) => ((i + 8) % 24 == 0) ? 24 : (i + 8) % 24,
-    );
-
+  Widget _buildColumn(String label, String value, Color color,
+      {bool isBold = false}) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        DropdownButton<int>(
-          value: selectedHora,
-          items: orderedHours
-              .map((hora) => DropdownMenuItem(
-                    value: hora,
-                    child: Text('Hora $hora'),
-                  ))
-              .toList(),
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                selectedHora = value;
-              });
-            }
-          },
-        ),
-        const SizedBox(height: 16.0),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancelar'),
-            ),
-            TextButton(
-              onPressed: () async {
-                await _calculateBalance(ref);
-                Navigator.of(context).pop();
-              },
-              child: const Text('Calcular'),
-            ),
-          ],
+        Text(label, style: const TextStyle(fontSize: 12)),
+        Text(
+          '$value ml',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+            color: color,
+          ),
         ),
       ],
     );
-  }
-
-  // Method to calculate balance and refresh the UI
-  Future<void> _calculateBalance(WidgetRef ref) async {
-    final calculateParams = CalculateParams(
-      idIngreso: widget.idIngreso,
-      idRegistroDiario: widget.idRegistroDiario,
-      hora: selectedHora,
-    );
-
-    // Trigger the calculation
-    await ref.read(calculateBalanceProvider(calculateParams).future);
-
-    // Invalidate the provider to refresh the data
-    ref.invalidate(totalBalanceProvider(BalanceParams(
-      idIngreso: widget.idIngreso,
-      idRegistroDiario: widget.idRegistroDiario,
-    )));
   }
 }

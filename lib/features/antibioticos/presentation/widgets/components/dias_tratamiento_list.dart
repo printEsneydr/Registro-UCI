@@ -41,6 +41,23 @@ class DiasTratamientoList extends ConsumerWidget {
 
     return diasTratamiento.when(
       data: (data) {
+        if (data.isEmpty) {
+          return RefreshIndicator(
+            onRefresh: refresh,
+            child: ListView(
+              children: const [
+                SizedBox(height: 80),
+                Center(
+                  child: Text(
+                    "No hay días de tratamiento registrados.\nDesliza hacia abajo para actualizar.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
         return RefreshIndicator(
           onRefresh: refresh,
           child: ListView.separated(

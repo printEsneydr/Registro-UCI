@@ -29,8 +29,12 @@ mixin _$Cateter {
       throw _privateConstructorUsedError; // ✅ Ahora es DateTime opcional
   String get lugarProcedencia => throw _privateConstructorUsedError;
 
+  /// Serializes this Cateter to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Cateter
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CateterCopyWith<Cateter> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -58,6 +62,8 @@ class _$CateterCopyWithImpl<$Res, $Val extends Cateter>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Cateter
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -121,6 +127,8 @@ class __$$CateterImplCopyWithImpl<$Res>
       _$CateterImpl _value, $Res Function(_$CateterImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Cateter
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -210,12 +218,14 @@ class _$CateterImpl implements _Cateter {
                 other.lugarProcedencia == lugarProcedencia));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, tipo, sitio, fechaInsercion,
       fechaRetiro, lugarProcedencia);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Cateter
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CateterImplCopyWith<_$CateterImpl> get copyWith =>
@@ -247,13 +257,16 @@ abstract class _Cateter implements Cateter {
   @override
   String get sitio;
   @override
-  DateTime get fechaInsercion;
-  @override // ✅ Ahora es DateTime
-  DateTime? get fechaRetiro;
-  @override // ✅ Ahora es DateTime opcional
-  String get lugarProcedencia;
+  DateTime get fechaInsercion; // ✅ Ahora es DateTime
   @override
-  @JsonKey(ignore: true)
+  DateTime? get fechaRetiro; // ✅ Ahora es DateTime opcional
+  @override
+  String get lugarProcedencia;
+
+  /// Create a copy of Cateter
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CateterImplCopyWith<_$CateterImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

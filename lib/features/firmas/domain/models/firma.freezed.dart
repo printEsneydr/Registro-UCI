@@ -19,7 +19,9 @@ mixin _$Firma {
   String get nombreFirma => throw _privateConstructorUsedError;
   DateTime get fechaFirma => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Firma
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FirmaCopyWith<Firma> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -41,6 +43,8 @@ class _$FirmaCopyWithImpl<$Res, $Val extends Firma>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Firma
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -78,6 +82,8 @@ class __$$FirmaImplCopyWithImpl<$Res>
       _$FirmaImpl _value, $Res Function(_$FirmaImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Firma
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -126,7 +132,9 @@ class _$FirmaImpl implements _Firma {
   @override
   int get hashCode => Object.hash(runtimeType, nombreFirma, fechaFirma);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Firma
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FirmaImplCopyWith<_$FirmaImpl> get copyWith =>
@@ -142,8 +150,11 @@ abstract class _Firma implements Firma {
   String get nombreFirma;
   @override
   DateTime get fechaFirma;
+
+  /// Create a copy of Firma
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FirmaImplCopyWith<_$FirmaImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

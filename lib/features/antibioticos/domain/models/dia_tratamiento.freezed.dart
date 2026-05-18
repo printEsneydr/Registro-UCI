@@ -22,7 +22,9 @@ mixin _$DiaTratamiento {
   DateTime get fin => throw _privateConstructorUsedError;
   bool get valido => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DiaTratamiento
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DiaTratamientoCopyWith<DiaTratamiento> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -51,6 +53,8 @@ class _$DiaTratamientoCopyWithImpl<$Res, $Val extends DiaTratamiento>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DiaTratamiento
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -109,6 +113,8 @@ class __$$DiaTratamientoImplCopyWithImpl<$Res>
       _$DiaTratamientoImpl _value, $Res Function(_$DiaTratamientoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DiaTratamiento
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -187,7 +193,9 @@ class _$DiaTratamientoImpl implements _DiaTratamiento {
   int get hashCode =>
       Object.hash(runtimeType, idDiaTratamiento, dia, inicio, fin, valido);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DiaTratamiento
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DiaTratamientoImplCopyWith<_$DiaTratamientoImpl> get copyWith =>
@@ -213,8 +221,11 @@ abstract class _DiaTratamiento implements DiaTratamiento {
   DateTime get fin;
   @override
   bool get valido;
+
+  /// Create a copy of DiaTratamiento
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DiaTratamientoImplCopyWith<_$DiaTratamientoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

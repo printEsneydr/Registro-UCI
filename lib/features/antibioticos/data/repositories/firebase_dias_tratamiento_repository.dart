@@ -96,46 +96,85 @@ class FirebaseDiasTratamientoRepository implements DiasTratamientoRepository {
           .collection('tratamientosAntibioticos')
           .doc(idTratamientoAntibiotico);
 
-      // Get the tratamientoAntibiotico document to read frecuenciaEn24h and cantidad
       final tratamientoSnapshot = await tratamientoRef.get();
       if (!tratamientoSnapshot.exists) {
         throw Exception('Tratamiento antibiótico no encontrado');
       }
 
-      // Extract frecuenciaEn24h and cantidad
       final tratamientoData = tratamientoSnapshot.data()!;
       final int frecuenciaEn24h = tratamientoData['frecuenciaEn24h'];
       final int cantidad = tratamientoData['cantidad'];
+      final DateTime fechaInicio =
+          (tratamientoData['fechaInicio'] as Timestamp).toDate();
 
       final int expectedCantidad = frecuenciaEn24h * cantidad;
+      final now = DateTime.now();
 
-      // Get all diasTratamiento
+      // Get existing days
       final diasTratamientoSnapshot =
           await tratamientoRef.collection('diasTratamiento').get();
+      final existingDays = diasTratamientoSnapshot.docs
+          .map((d) => d.data()['dia'] as int)
+          .toSet();
+
+      // Calculate how many days should exist from fechaInicio to now
+      final int totalDaysShouldExist =
+          now.difference(fechaInicio).inDays ~/ 1 + 1;
+
+      DateTime currentInicio = fechaInicio;
 
       final batch = _firestore.batch();
 
+      for (int d = 0; d < totalDaysShouldExist; d++) {
+        final dayNum = d + 1;
+        if (!existingDays.contains(dayNum)) {
+          DateTime fin = currentInicio.add(const Duration(hours: 23, minutes: 59));
+
+          final diaTratamientoRef = tratamientoRef
+              .collection('diasTratamiento')
+              .doc(dayNum.toString());
+          batch.set(diaTratamientoRef, {
+            'inicio': currentInicio,
+            'fin': fin,
+            'dia': dayNum,
+            'valido': false,
+          });
+
+          final dosisInterval =
+              Duration(hours: 24 ~/ frecuenciaEn24h);
+          DateTime dosisHora = currentInicio;
+
+          for (int i = 0; i < frecuenciaEn24h; i++) {
+            final dosisRef = diaTratamientoRef.collection('dosis').doc();
+            batch.set(dosisRef, {
+              'hora': dosisHora,
+              'cantidad': cantidad,
+              'dosis': '',
+              'comentario': '',
+            });
+            dosisHora = dosisHora.add(dosisInterval);
+          }
+
+        }
+        currentInicio = currentInicio.add(const Duration(hours: 24));
+      }
+
+      // Update valido flag on existing days
       for (var diaDoc in diasTratamientoSnapshot.docs) {
         final diaTratamientoRef = diaDoc.reference;
+        final dosisSnapshot =
+            await diaTratamientoRef.collection('dosis').get();
 
-        // Get all dosis for the current diaTratamiento
-        final dosisSnapshot = await diaTratamientoRef.collection('dosis').get();
-
-        // Calculate actualCantidad by summing the 'cantidad' field of each dosis
-        int actualCantidad = dosisSnapshot.docs.fold<int>(0, (suma, dosisDoc) {
+        int actualCantidad =
+            dosisSnapshot.docs.fold<int>(0, (suma, dosisDoc) {
           return suma + (dosisDoc.data()['cantidad'] as int);
         });
 
-        // Compare actualCantidad with expectedCantidad and update 'valido'
-        bool isValid = actualCantidad == expectedCantidad;
-
-        // Update 'valido' field in diaTratamiento
         batch.update(diaTratamientoRef, {
-          'valido': isValid,
+          'valido': actualCantidad == expectedCantidad,
         });
       }
 
-      // Commit the batch update
       await batch.commit();
       log('Dias de tratamiento actualizados exitosamente');
     } catch (e) {

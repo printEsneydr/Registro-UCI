@@ -20,7 +20,9 @@ mixin _$Intervencion {
   String get idNIC => throw _privateConstructorUsedError;
   String get nombre => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Intervencion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $IntervencionCopyWith<Intervencion> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -44,6 +46,8 @@ class _$IntervencionCopyWithImpl<$Res, $Val extends Intervencion>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Intervencion
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -87,6 +91,8 @@ class __$$IntervencionImplCopyWithImpl<$Res>
       _$IntervencionImpl _value, $Res Function(_$IntervencionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Intervencion
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -145,7 +151,9 @@ class _$IntervencionImpl implements _Intervencion {
   @override
   int get hashCode => Object.hash(runtimeType, idIntervencion, idNIC, nombre);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Intervencion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$IntervencionImplCopyWith<_$IntervencionImpl> get copyWith =>
@@ -164,8 +172,11 @@ abstract class _Intervencion implements Intervencion {
   String get idNIC;
   @override
   String get nombre;
+
+  /// Create a copy of Intervencion
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$IntervencionImplCopyWith<_$IntervencionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

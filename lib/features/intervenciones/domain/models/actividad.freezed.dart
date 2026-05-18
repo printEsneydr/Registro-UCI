@@ -19,7 +19,9 @@ mixin _$Actividad {
   String get idActividad => throw _privateConstructorUsedError;
   String get descripcion => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Actividad
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ActividadCopyWith<Actividad> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -42,6 +44,8 @@ class _$ActividadCopyWithImpl<$Res, $Val extends Actividad>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Actividad
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -80,6 +84,8 @@ class __$$ActividadImplCopyWithImpl<$Res>
       _$ActividadImpl _value, $Res Function(_$ActividadImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Actividad
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -128,7 +134,9 @@ class _$ActividadImpl implements _Actividad {
   @override
   int get hashCode => Object.hash(runtimeType, idActividad, descripcion);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Actividad
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ActividadImplCopyWith<_$ActividadImpl> get copyWith =>
@@ -144,8 +152,11 @@ abstract class _Actividad implements Actividad {
   String get idActividad;
   @override
   String get descripcion;
+
+  /// Create a copy of Actividad
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ActividadImplCopyWith<_$ActividadImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

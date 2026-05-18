@@ -49,7 +49,9 @@ mixin _$MonitoriaHemodinamica {
       throw _privateConstructorUsedError; // Insulina (Unidades)
   int? get saturacion => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MonitoriaHemodinamica
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MonitoriaHemodinamicaCopyWith<MonitoriaHemodinamica> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -93,6 +95,8 @@ class _$MonitoriaHemodinamicaCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MonitoriaHemodinamica
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -237,6 +241,8 @@ class __$$MonitoriaHemodinamicaImplCopyWithImpl<$Res>
       $Res Function(_$MonitoriaHemodinamicaImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MonitoriaHemodinamica
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -478,7 +484,9 @@ class _$MonitoriaHemodinamicaImpl implements _MonitoriaHemodinamica {
         saturacion
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MonitoriaHemodinamica
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MonitoriaHemodinamicaImplCopyWith<_$MonitoriaHemodinamicaImpl>
@@ -515,39 +523,42 @@ abstract class _MonitoriaHemodinamica implements MonitoriaHemodinamica {
   @override
   int get orden;
   @override
-  int? get pas;
-  @override // Presión arterial sistólica
-  int? get pad;
-  @override // Presión arterial diastólica
-  int? get pam;
-  @override // Presión arterial media (Fórmula: (2pad + 1pas)/3)
-  int? get fc;
-  @override // Frecuencia cardiaca (ppm)
-  int? get fr;
-  @override // Frecuencia respiratoria (rpm)
-  double? get t;
-  @override // Temperatura (°C)
-  int? get pvc;
-  @override // presion venosa central
-  int? get rvc;
-  @override // Resistencia vascular sistemica
-  int? get fio2;
-  @override // Fracción de Oxígeno Inspirado (%)
-  int? get pia;
-  @override // Presión intraabdominal (mm H2O)
-  int? get ppa;
-  @override // Presión de Perfusión arterial (mm Hg)
-  int? get pic;
-  @override // Presión intracraneal (mm Hg)
-  int? get ppc;
-  @override // Presión de Perfusión cerebral (mm Hg)
-  int? get glucometria;
-  @override // Glucometría (mg/dL)
-  int? get insulina;
-  @override // Insulina (Unidades)
-  int? get saturacion;
+  int? get pas; // Presión arterial sistólica
   @override
-  @JsonKey(ignore: true)
+  int? get pad; // Presión arterial diastólica
+  @override
+  int? get pam; // Presión arterial media (Fórmula: (2pad + 1pas)/3)
+  @override
+  int? get fc; // Frecuencia cardiaca (ppm)
+  @override
+  int? get fr; // Frecuencia respiratoria (rpm)
+  @override
+  double? get t; // Temperatura (°C)
+  @override
+  int? get pvc; // presion venosa central
+  @override
+  int? get rvc; // Resistencia vascular sistemica
+  @override
+  int? get fio2; // Fracción de Oxígeno Inspirado (%)
+  @override
+  int? get pia; // Presión intraabdominal (mm H2O)
+  @override
+  int? get ppa; // Presión de Perfusión arterial (mm Hg)
+  @override
+  int? get pic; // Presión intracraneal (mm Hg)
+  @override
+  int? get ppc; // Presión de Perfusión cerebral (mm Hg)
+  @override
+  int? get glucometria; // Glucometría (mg/dL)
+  @override
+  int? get insulina; // Insulina (Unidades)
+  @override
+  int? get saturacion;
+
+  /// Create a copy of MonitoriaHemodinamica
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MonitoriaHemodinamicaImplCopyWith<_$MonitoriaHemodinamicaImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

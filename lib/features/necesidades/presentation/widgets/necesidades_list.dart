@@ -27,8 +27,17 @@ class NecesidadesList extends ConsumerWidget {
 
     return necesidades.when(
       data: (data) {
+        if (data.isEmpty) {
+          return const Expanded(
+            child: Center(
+              child: Text(
+                "No hay necesidades registradas",
+                style: TextStyle(color: Colors.grey, fontSize: 16),
+              ),
+            ),
+          );
+        }
         return Expanded(
-          // height: MediaQuery.of(context).size.height * .3,
           child: SingleChildScrollView(
             child: Column(
               children: data

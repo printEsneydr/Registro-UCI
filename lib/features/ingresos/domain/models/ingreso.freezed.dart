@@ -36,7 +36,9 @@ mixin _$Ingreso {
   DateTime? get fechaFin => throw _privateConstructorUsedError;
   Sala get sala => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Ingreso
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $IngresoCopyWith<Ingreso> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -76,6 +78,8 @@ class _$IngresoCopyWithImpl<$Res, $Val extends Ingreso>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Ingreso
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -211,6 +215,8 @@ class __$$IngresoImplCopyWithImpl<$Res>
       _$IngresoImpl _value, $Res Function(_$IngresoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Ingreso
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -436,7 +442,9 @@ class _$IngresoImpl implements _Ingreso {
       fechaFin,
       sala);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Ingreso
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$IngresoImplCopyWith<_$IngresoImpl> get copyWith =>
@@ -465,8 +473,8 @@ abstract class _Ingreso implements Ingreso {
       required final Sala sala}) = _$IngresoImpl;
 
   @override
-  String get idIngreso;
-  @override // ✅ Se agregó idIngreso correctamente
+  String get idIngreso; // ✅ Se agregó idIngreso correctamente
+  @override
   String get nombrePaciente;
   @override
   DateTime? get fechaNacimientoPaciente;
@@ -500,8 +508,11 @@ abstract class _Ingreso implements Ingreso {
   DateTime? get fechaFin;
   @override
   Sala get sala;
+
+  /// Create a copy of Ingreso
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$IngresoImplCopyWith<_$IngresoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

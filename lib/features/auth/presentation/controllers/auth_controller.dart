@@ -9,14 +9,6 @@ class AuthController extends AsyncNotifier<AuthState> {
   late final AuthService _service = ref.watch(authServiceProvider);
   @override
   FutureOr<AuthState> build() async {
-    // return AuthState(
-    //   AuthResult.success,
-    //   const User(
-    //     id: '1',
-    //     role: UserRole.nutritionist,
-    //     name: 'Carlos Botina',
-    //   ),
-    // );
     return _service.getCurrentSession();
   }
 

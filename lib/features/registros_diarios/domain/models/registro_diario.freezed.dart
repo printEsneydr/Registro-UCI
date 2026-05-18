@@ -20,7 +20,9 @@ mixin _$RegistroDiario {
   DateTime get fechaRegistro => throw _privateConstructorUsedError;
   Firma? get firmaNecesidades => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RegistroDiario
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $RegistroDiarioCopyWith<RegistroDiario> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +51,8 @@ class _$RegistroDiarioCopyWithImpl<$Res, $Val extends RegistroDiario>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of RegistroDiario
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -72,6 +76,8 @@ class _$RegistroDiarioCopyWithImpl<$Res, $Val extends RegistroDiario>
     ) as $Val);
   }
 
+  /// Create a copy of RegistroDiario
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $FirmaCopyWith<$Res>? get firmaNecesidades {
@@ -110,6 +116,8 @@ class __$$RegistroDiarioImplCopyWithImpl<$Res>
       _$RegistroDiarioImpl _value, $Res Function(_$RegistroDiarioImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of RegistroDiario
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -171,7 +179,9 @@ class _$RegistroDiarioImpl implements _RegistroDiario {
   int get hashCode => Object.hash(
       runtimeType, idRegistroDiario, fechaRegistro, firmaNecesidades);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RegistroDiario
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$RegistroDiarioImplCopyWith<_$RegistroDiarioImpl> get copyWith =>
@@ -191,8 +201,11 @@ abstract class _RegistroDiario implements RegistroDiario {
   DateTime get fechaRegistro;
   @override
   Firma? get firmaNecesidades;
+
+  /// Create a copy of RegistroDiario
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RegistroDiarioImplCopyWith<_$RegistroDiarioImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

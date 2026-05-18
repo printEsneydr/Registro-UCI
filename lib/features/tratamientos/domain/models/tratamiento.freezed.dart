@@ -23,7 +23,9 @@ mixin _$Tratamiento {
   int get frecuencia => throw _privateConstructorUsedError;
   DateTime get fechaInicio => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Tratamiento
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TratamientoCopyWith<Tratamiento> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -53,6 +55,8 @@ class _$TratamientoCopyWithImpl<$Res, $Val extends Tratamiento>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Tratamiento
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -117,6 +121,8 @@ class __$$TratamientoImplCopyWithImpl<$Res>
       _$TratamientoImpl _value, $Res Function(_$TratamientoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Tratamiento
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -207,7 +213,9 @@ class _$TratamientoImpl implements _Tratamiento {
   int get hashCode => Object.hash(runtimeType, idTratamiento, medicamento,
       cantidad, unidad, frecuencia, fechaInicio);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Tratamiento
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TratamientoImplCopyWith<_$TratamientoImpl> get copyWith =>
@@ -235,8 +243,11 @@ abstract class _Tratamiento implements Tratamiento {
   int get frecuencia;
   @override
   DateTime get fechaInicio;
+
+  /// Create a copy of Tratamiento
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TratamientoImplCopyWith<_$TratamientoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

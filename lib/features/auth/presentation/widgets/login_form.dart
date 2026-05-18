@@ -4,6 +4,7 @@ import 'package:registro_uci/features/auth/presentation/widgets/components/butto
 import 'package:registro_uci/features/auth/presentation/widgets/validators/email_validator.dart';
 import 'package:registro_uci/features/auth/presentation/widgets/validators/password_validator.dart';
 
+
 class LoginForm extends StatefulWidget {
   const LoginForm({
     super.key,
@@ -55,7 +56,7 @@ class _LoginFormState extends State<LoginForm> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
-                "Registro Diario UCI",
+                "Sabana UCI",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 28,
@@ -122,7 +123,7 @@ class _LoginFormState extends State<LoginForm> {
                 formKey: _formKey,
                 emailController: _emailController,
                 passwordController: _passwordController,
-              )
+              ),
             ],
           ),
         ),

@@ -5,12 +5,45 @@ import 'package:registro_uci/common/validators/default_validator.dart';
 import 'package:registro_uci/features/balance_liquidos/balance_liquidos_administrados/data/providers/liquidos_administrados_provider.dart';
 import 'package:registro_uci/features/balance_liquidos/balance_liquidos_administrados/presentation/widgets/components/buttons/create_liquido_administrado_form_button.dart';
 
+const categoriasLiquidos = [
+  'Medicamentos',
+  'Líquidos Endovenosos',
+  'Nutrición Enteral / Vía Oral',
+  'Irrigación',
+  'Otros'
+];
+
 const medicamentos = [
   'Paracetamol',
   'Ibuprofeno',
   'Ranitidina',
   'Amoxicilina',
-  'Other'
+  'Ceftriaxona',
+  'Metronidazol',
+  'Vancomicina',
+  'Meropenem',
+  'Potasio',
+  'Otros'
+];
+
+const liquidosEndovenosos = [
+  'Solución Salina 0.9%',
+  'Solución Salina 0.45%',
+  'Dextrosa 5%',
+  'Dextrosa 10%',
+  'Bicarbonato de Sodio',
+  'Albumina',
+  'Plasma',
+  'Otros'
+];
+
+const nutricionEnteral = [
+  'Fórmula Polimérica',
+  'Fórmula Elemental',
+  'Fórmula Hipercalórica',
+  'Agua de Sonda',
+  'Dieta oral líquida',
+  'Otros'
 ];
 
 class CreateLiquidoAdministradoForm extends StatefulWidget {
@@ -28,9 +61,23 @@ class _CreateLiquidoAdministradoFormState
   late TextEditingController _cantidadController;
   late TextEditingController _comentarioController;
   late TextEditingController _dosisController;
-  late TextEditingController _otherMedicamentoController;
-  String? _selectedMedicamento;
+  late TextEditingController _otroController;
+  String? _selectedCategoria;
+  String? _selectedLiquido;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  List<String> _getLiquidosForCategoria(String categoria) {
+    switch (categoria) {
+      case 'Medicamentos':
+        return medicamentos;
+      case 'Líquidos Endovenosos':
+        return liquidosEndovenosos;
+      case 'Nutrición Enteral / Vía Oral':
+        return nutricionEnteral;
+      default:
+        return ['Otros'];
+    }
+  }
 
   @override
   void initState() {
@@ -38,7 +85,7 @@ class _CreateLiquidoAdministradoFormState
     _cantidadController = TextEditingController();
     _comentarioController = TextEditingController();
     _dosisController = TextEditingController();
-    _otherMedicamentoController = TextEditingController();
+    _otroController = TextEditingController();
   }
 
   @override
@@ -46,7 +93,7 @@ class _CreateLiquidoAdministradoFormState
     _cantidadController.dispose();
     _comentarioController.dispose();
     _dosisController.dispose();
-    _otherMedicamentoController.dispose();
+    _otroController.dispose();
     super.dispose();
   }
 
@@ -64,82 +111,95 @@ class _CreateLiquidoAdministradoFormState
 
     return Form(
       key: _formKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 15),
-
-          // Medicamento Dropdown field
-          EnumDropdownButtonFormField(
-            value: _selectedMedicamento,
-            label: "Medicamento",
-            values: medicamentos,
-            onSelected: (newValue) {
-              setState(() {
-                _selectedMedicamento = newValue;
-              });
-            },
-            validator: (value) =>
-                value == null ? 'Seleccione un medicamento' : null,
-          ),
-
-          // Conditional visibility for "Other" medication input
-          Visibility(
-            visible: _selectedMedicamento == 'Other',
-            child: Padding(
-              padding: const EdgeInsets.only(top: 15.0),
-              child: OutlinedTextFormField(
-                controller: _otherMedicamentoController,
-                label: "Especificar Medicamento",
-                prefixIcon: const Icon(Icons.edit_outlined),
-                validator: (value) => value != null && value.isEmpty
-                    ? 'Especifique el medicamento'
-                    : null,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 15),
+            EnumDropdownButtonFormField(
+              value: _selectedCategoria,
+              label: "Categoría",
+              values: categoriasLiquidos,
+              onSelected: (newValue) {
+                setState(() {
+                  _selectedCategoria = newValue;
+                  _selectedLiquido = null;
+                });
+              },
+              validator: (value) =>
+                  value == null ? 'Seleccione una categoría' : null,
+            ),
+            const SizedBox(height: 15),
+            if (_selectedCategoria != null) ...[
+              EnumDropdownButtonFormField(
+                value: _selectedLiquido,
+                label: _selectedCategoria == 'Medicamentos'
+                    ? 'Medicamento'
+                    : _selectedCategoria == 'Líquidos Endovenosos'
+                        ? 'Líquido Endovenoso'
+                        : _selectedCategoria == 'Nutrición Enteral / Vía Oral'
+                            ? 'Nutrición'
+                            : 'Tipo',
+                values: _getLiquidosForCategoria(_selectedCategoria!),
+                onSelected: (newValue) {
+                  setState(() {
+                    _selectedLiquido = newValue;
+                  });
+                },
+                validator: (value) =>
+                    value == null ? 'Seleccione una opción' : null,
+              ),
+              const SizedBox(height: 15),
+            ],
+            Visibility(
+              visible: _selectedLiquido == 'Otros',
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: OutlinedTextFormField(
+                  controller: _otroController,
+                  label: "Especificar",
+                  prefixIcon: const Icon(Icons.edit_outlined),
+                  validator: (value) =>
+                      value != null && value.isEmpty ? 'Especifique' : null,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 15),
-
-          // Cantidad field
-          OutlinedTextFormField(
-            controller: _cantidadController,
-            label: "Cantidad (ml)",
-            prefixIcon: const Icon(Icons.local_drink_outlined, size: 25),
-            textInputType: TextInputType.number,
-            validator: defaultValidator,
-          ),
-          const SizedBox(height: 15),
-
-          // Dosis field
-          OutlinedTextFormField(
-            controller: _dosisController,
-            label: "Dosis",
-            prefixIcon: const Icon(Icons.medication_outlined, size: 25),
-            validator: defaultValidator,
-          ),
-          const SizedBox(height: 15),
-
-          // Comentario field (optional)
-          OutlinedTextFormField(
-            controller: _comentarioController,
-            label: "Comentario",
-            prefixIcon: const Icon(Icons.comment_outlined, size: 25),
-          ),
-          const SizedBox(height: 30),
-
-          // Create button
-          CreateLiquidoAdministradoFormButton(
-            formKey: _formKey,
-            selectedMedicamento: _selectedMedicamento,
-            otherMedicamentoController: _otherMedicamentoController,
-            cantidadController: _cantidadController,
-            comentarioController: _comentarioController,
-            dosisController: _dosisController,
-            params: widget.params,
-            hora: dateTime,
-          ),
-        ],
+            const SizedBox(height: 15),
+            OutlinedTextFormField(
+              controller: _cantidadController,
+              label: "Cantidad (ml)",
+              prefixIcon: const Icon(Icons.local_drink_outlined, size: 25),
+              textInputType: TextInputType.number,
+              validator: defaultValidator,
+            ),
+            const SizedBox(height: 15),
+            OutlinedTextFormField(
+              controller: _dosisController,
+              label: _selectedCategoria == 'Medicamentos'
+                  ? "Dosis"
+                  : "Concentración",
+              prefixIcon: const Icon(Icons.medication_outlined, size: 25),
+            ),
+            const SizedBox(height: 15),
+            OutlinedTextFormField(
+              controller: _comentarioController,
+              label: "Comentario",
+              prefixIcon: const Icon(Icons.comment_outlined, size: 25),
+            ),
+            const SizedBox(height: 30),
+            CreateLiquidoAdministradoFormButton(
+              formKey: _formKey,
+              selectedMedicamento: _selectedLiquido,
+              otherMedicamentoController: _otroController,
+              cantidadController: _cantidadController,
+              comentarioController: _comentarioController,
+              dosisController: _dosisController,
+              params: widget.params,
+              hora: dateTime,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:registro_uci/features/ingresos/data/providers/ingreso_by_id_prov
 import 'package:registro_uci/features/ingresos/presentation/widgets/components/tiles/cateteres_tile.dart';
 import 'package:registro_uci/features/ingresos/presentation/widgets/components/tiles/detalles_ingreso_tile.dart';
 import 'package:registro_uci/features/ingresos/presentation/widgets/components/tiles/marcapasos_tile.dart';
+import 'package:registro_uci/features/ingresos/presentation/widgets/components/tiles/nutricion_tile.dart';
 import 'package:registro_uci/features/ingresos/presentation/widgets/components/tiles/procedimientos_especiales_tile.dart';
 import 'package:registro_uci/features/ingresos/presentation/widgets/components/tiles/registros_diarios_tile.dart';
 import 'package:registro_uci/features/ingresos/presentation/widgets/components/tiles/sondas_tile.dart';
@@ -60,6 +61,8 @@ class IngresoPage extends ConsumerWidget {
                 height: 10,
               ),
               SondasTile(idIngreso: idIngreso),
+              const SizedBox(height: 10),
+              NutricionTile(idIngreso: idIngreso),
               const SizedBox(height: 10),
               TerminarIngresoTile(idIngreso: data.idIngreso),
             ],

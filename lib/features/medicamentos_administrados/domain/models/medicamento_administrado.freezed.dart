@@ -22,7 +22,9 @@ mixin _$MedicamentoAdministrado {
   String get unidad => throw _privateConstructorUsedError;
   bool get esTratamiento => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MedicamentoAdministrado
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MedicamentoAdministradoCopyWith<MedicamentoAdministrado> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -52,6 +54,8 @@ class _$MedicamentoAdministradoCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MedicamentoAdministrado
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -113,6 +117,8 @@ class __$$MedicamentoAdministradoImplCopyWithImpl<$Res>
       $Res Function(_$MedicamentoAdministradoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MedicamentoAdministrado
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -194,7 +200,9 @@ class _$MedicamentoAdministradoImpl implements _MedicamentoAdministrado {
   int get hashCode => Object.hash(runtimeType, idMedicamentoAdministrado,
       medicamento, cantidad, unidad, esTratamiento);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MedicamentoAdministrado
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MedicamentoAdministradoImplCopyWith<_$MedicamentoAdministradoImpl>
@@ -220,8 +228,11 @@ abstract class _MedicamentoAdministrado implements MedicamentoAdministrado {
   String get unidad;
   @override
   bool get esTratamiento;
+
+  /// Create a copy of MedicamentoAdministrado
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MedicamentoAdministradoImplCopyWith<_$MedicamentoAdministradoImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
